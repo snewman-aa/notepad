@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}{{ note.name }}{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+    <article class="note-content">
+        <p>{{ note.content }}</p>
+        <small>{{ note.created_at|social_date }}</small>
+    </article>
+
+    <h2>Comments</h2>
+    {% if note.comments %}
+        <ul>
+        {% for comment in note.comments %}
+            <li>
+                <p class="comment-content">{{ comment.content }}</p>
+                <small>{{ comment.created_at|social_date }}</small>
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No comments yet.</p>
+    {% endif %}
+
+    <section class="add-comment">
+        <h3>Add a Comment</h3>
+        <form method="post" action="{{ url_for('routes.add_comment', note_name=note.name) }}">
+            <label for="comment_content">Your Comment:</label>
+            <textarea name="comment_content" id="comment_content" required></textarea>
+            <input type="submit" value="Add Comment">
+        </form>
+    </section>
+
+    <section class="delete-note">
+        <form method="post" action="{{ url_for('routes.delete_note', name=note.name) }}">
+            <input type="submit" value="Delete Note" onclick="return confirm('Are you sure you want to delete this note and all its comments?')">
+        </form>
+    </section>
+{% endblock %}

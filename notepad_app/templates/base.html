@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %} - Notepad</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&display=swap" rel="stylesheet"> </head>
+<body>
+    <div class="container"> <aside class="sidebar">
+            <div class="sidebar-header">
+                <h1>Notepad</h1>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="{{ url_for('routes.index') }}">All Notes</a></li> <li><a href="{{ url_for('routes.create_note') }}">Create New Note</a></li>
+                    <li><a href="{{ url_for('routes.search_notes') }}">Search Notes</a></li>
+                </ul>
+            </nav>
+            <div class="note-list">
+                <h3>Notes</h3>
+                {% block sidebar_notes %}  {% if notes %}
+                        {% for note in notes %}
+                            <a href="{{ url_for('routes.view_note', name=note.name) }}" class="note-item">
+                                {{ note.name }}
+                            </a>
+                        {% endfor %}
+                    {% else %}
+                        <p>No notes yet.</p>
+                    {% endif %}
+                {% endblock %}
+            </div>
+        </aside>
+        <main class="main-content">
+            <header>
+                {% block header %}{% endblock %}
+            </header>
+            {% with messages = get_flashed_messages() %}
+              {% if messages %}
+                <ul class="flashes">
+                {% for message in messages %}
+                  <li>{{ message }}</li>
+                {% endfor %}
+                </ul>
+              {% endif %}
+            {% endwith %}
+            <section class="content-area"> {% block content %} {% endblock %}
+            </section>
+        </main>
+    </div>
+</body>
+</html>

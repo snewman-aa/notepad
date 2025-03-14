@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}Notes{% endblock %}
+
+{% block sidebar_notes %}
+    {% if notes %}
+        {% for note in notes %}
+            <a href="{{ url_for('routes.view_note', name=note.name) }}" class="note-item">
+                {{ note.name }}
+            </a>
+        {% endfor %}
+    {% else %}
+        <p>No notes yet.</p>
+    {% endif %}
+{% endblock %}
+
+{% block header %}
+  <h1>Notes</h1>
+{% endblock %}
+
+{% block content %}
+<p>Welcome to Notepad! It's a notetaking app, but it's pretending to be a social media site, but only for you!</p>
+<p>Here you can:</p>
+<ul>
+    <li>Write notes</li>
+    <li>View notes</li>
+    <li>Comment on notes</li>
+    <li>Delete notes</li>
+</ul>
+<p>Click on a note in the sidebar to view it, or create a new one.</p>
+{% endblock %}
