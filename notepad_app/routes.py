@@ -1,5 +1,4 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
-from sqlalchemy import Integer
 
 from notepad_app import db
 from notepad_app.models import Note, Comment
