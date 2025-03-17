@@ -1,7 +1,7 @@
 [project]
 name = "notepad"
 version = "0.1.0"
-description = "Add your description here"
+description = "Flask notebook app with sqlite and sqlalchemy backend"
 readme = "README.md"
 requires-python = ">=3.12"
 
