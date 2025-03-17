@@ -7,12 +7,14 @@ bp = Blueprint('routes', __name__)
 
 @bp.route('/')
 def index():
+    """Home page"""
     notes = Note.query.order_by(Note.created_at.desc()).all()
     return render_template('index.html', notes=notes)
 
 
 @bp.route('/create', methods=['GET', 'POST'])
 def create_note():
+    """Create a new note, requires a name and content"""
     if request.method == 'POST':
         name = request.form['name']
         content = request.form['content']
@@ -35,10 +37,12 @@ def create_note():
 
 @bp.route('/search', methods=['GET', 'POST'])
 def search_notes():
+    """Search for notes by name or content"""
     if request.method == 'POST':
         search_term = request.form['search_term']
         if search_term:
             search_term = f'%{search_term}%'
+            # Case-insensitive search within note name and content
             notes = Note.query.filter(db.or_(
                 Note.name.ilike(search_term),
                 Note.content.ilike(search_term)
@@ -50,12 +54,14 @@ def search_notes():
 
 @bp.route('/notes/<name>')
 def view_note(name):
+    """View a note and its comments on its own page"""
     note = Note.query.filter_by(name=name).first_or_404()
     return render_template('view_note.html', note=note)
 
 
 @bp.route('/notes/<note_name>/comment', methods=['POST'])
 def add_comment(note_name):
+    """Add a comment to a note. Comments require content and a parent note."""
     note = Note.query.filter_by(name=note_name).first_or_404()
     content = request.form['comment_content']
     if content:
@@ -67,6 +73,7 @@ def add_comment(note_name):
 
 @bp.route('/notes/<name>/delete', methods=['POST'])
 def delete_note(name):
+    """Delete a note and its comments"""
     note = Note.query.filter_by(name=name).first_or_404()
     db.session.delete(note)
     db.session.commit()

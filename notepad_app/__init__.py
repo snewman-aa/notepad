@@ -11,6 +11,7 @@ def create_app():
     """Application factory function."""
     app = Flask(__name__, instance_relative_config=True)
 
+    # Not deployed, so just using a simple secret key
     app.config.from_mapping(
         SECRET_KEY='dev',
         SQLALCHEMY_DATABASE_URI='sqlite:///' + os.path.join(app.instance_path, 'notes.sqlite'),
@@ -28,6 +29,7 @@ def create_app():
     from . import routes
     app.register_blueprint(routes.bp)
 
+    # Injecting notes into all templates so the sidebar can display them
     @app.context_processor
     def inject_notes():
         from notepad_app.models import Note  # See, Marc, no circular import
@@ -35,6 +37,7 @@ def create_app():
         return dict(notes=notes)
 
 
+    # Using humanize to make dates social-media vibes
     @app.template_filter('social_date')
     def social_date_filter(date_value):
         if not date_value:
